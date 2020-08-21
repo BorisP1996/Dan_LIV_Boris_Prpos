@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,12 +10,19 @@ namespace Zadatak_1
 {
     class Program
     {
-        static CountdownEvent countDown= new CountdownEvent(6);
+        static CountdownEvent countDown = new CountdownEvent(6);
+        static CountdownEvent countDown_gas_semaphore = new CountdownEvent(1);
+        static CountdownEvent raceContinues= new CountdownEvent(1);
+        static Random rnd = new Random();
+
+        static readonly object locker = new object();
 
         static void Main(string[] args)
         {
             Car car1 = new Car("Blue");
             Car car2 = new Car("Red");
+            car1.Registration = "000-PD-XX";
+            car2.Registration = "111-PD-YY";
             Truck truck1 = new Truck("White");
             Truck truck2 = new Truck("Black");
             Tractor tractor1 = new Tractor("Green");
@@ -31,77 +39,37 @@ namespace Zadatak_1
             tractors.Add(tractor1);
             tractors.Add(tractor2);
 
-            Console.WriteLine("5 second countdown starts...\n");
-
-            //System.Timers.Timer aTimer = new System.Timers.Timer();
-            //aTimer.Interval = 5000;
-            //aTimer.Elapsed += OnTimedEvent;
-            //aTimer.Enabled = true;
-            //aTimer.AutoReset = false;
-
-            int count = 5;
-            while (count != 0)
+            for (int i = 5; i >0; i--)
             {
-                Console.WriteLine(count);
-                count--;
+                Console.WriteLine(i);
                 Thread.Sleep(1000);
             }
-
-
-            Console.WriteLine("All cars are ready to go!");
-            Console.WriteLine("\nWaiting for orange golf to join...\n");
-            Thread.Sleep(1000);
-
-            for (int i = 0; i < cars.Count; i++)
+            foreach (Car item in cars)
             {
-                int temp = i;
-                Thread t = new Thread(() => cars[temp].Go(cars[temp]));
-                t.Start();
-                countDown.Signal();
-            }
-            for (int i = 0; i < trucks.Count; i++)
-            {
-                int temp = i;
-                Thread t = new Thread(() => trucks[temp].Go(trucks[temp]));
-                t.Start();
-                countDown.Signal();
-            }
-            for (int i = 0; i < tractors.Count; i++)
-            {
-                int temp = i;
-                Thread t = new Thread(() => tractors[temp].Go(tractors[temp]));
-                t.Start();
-                countDown.Signal();
-            }      
-
-            if (countDown.IsSet)
-            {
-                Thread.Sleep(100);
-                
-                System.Timers.Timer golfTimer = new System.Timers.Timer();
-                golfTimer.Interval = 100;
-                golfTimer.Elapsed += OrangeGolf;
-                golfTimer.Enabled = true;
-                golfTimer.AutoReset = false;
+                item.ApproachStart();
+                item.FuelLeft = 100;
+                item.FuelSpentBySecond = rnd.Next(4, 7);
             }
 
+            Car car3 = new Car("Orange");
+            car3.Manufacturer = "Golf";
+            car3.Registration = "222-PD-ZZ";
+            car3.FuelLeft = 100;
+            car3.FuelSpentBySecond = rnd.Next(4, 7);
+            car3.ApproachStart();
 
-            
+            Thread t1 = new Thread(() => car1.RaceMethod());
+            Thread t2 = new Thread(() => car2.RaceMethod());
+            Thread t3 = new Thread(() => car3.RaceMethod());
+            Thread Green_Red = new Thread(() => Car.Sempaphore());
 
-            Console.ReadKey();
+            Green_Red.Start();
+            t1.Start();
+            t2.Start();
+            t3.Start();
 
-        }
+            Console.ReadLine();
 
-        private static void OnTimedEvent(Object source,System.Timers.ElapsedEventArgs e)
-        {
-            Console.WriteLine("\nRace started!");
-        }
-
-        private static void OrangeGolf(Object source,System.Timers.ElapsedEventArgs e)
-        {
-            Car OrangeGolf = new Car("Orange golf joined and");
-            Thread orange = new Thread(() => OrangeGolf.Go(OrangeGolf));
-            orange.Start();
         }
     }
 }

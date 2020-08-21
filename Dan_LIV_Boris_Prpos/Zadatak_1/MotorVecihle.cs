@@ -15,8 +15,8 @@ namespace Zadatak_1
         public string Color;
         public int EngineNumber;
 
-        public abstract void Go(MotorVecihle mv);
+        public abstract void Go();
 
-        public abstract void Stop(MotorVecihle mv);
+        public abstract void Stop();
     }
 }

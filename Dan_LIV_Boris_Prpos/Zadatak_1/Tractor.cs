@@ -16,14 +16,14 @@ namespace Zadatak_1
         {
             Color = col;
         }
-        public override void Go(MotorVecihle tractor)
+        public override void Go()
         {
-            Console.WriteLine("{0} tractor started",tractor.Color);
+            Console.WriteLine("{0} tractor started",Color);
         }
 
-        public override void Stop(MotorVecihle tractor)
+        public override void Stop()
         {
-            Console.WriteLine("{0} tractor stopped",tractor.Color);
+            Console.WriteLine("{0} tractor stopped",Color);
         }
     }
 }

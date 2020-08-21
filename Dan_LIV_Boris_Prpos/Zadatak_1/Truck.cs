@@ -16,9 +16,9 @@ namespace Zadatak_1
         {
             Color = color;
         }
-        public override void Go(MotorVecihle Truck)
+        public override void Go()
         {
-            Console.WriteLine("{0} truck started",Truck.Color);
+            Console.WriteLine("{0} truck started",Color);
         }
 
         public void Load()
@@ -26,9 +26,9 @@ namespace Zadatak_1
 
         }
 
-        public override void Stop(MotorVecihle Truck)
+        public override void Stop()
         {
-            Console.WriteLine("{0} truck stopped",Truck.Color);
+            Console.WriteLine("{0} truck stopped",Color);
         }
 
         public void Unload()
