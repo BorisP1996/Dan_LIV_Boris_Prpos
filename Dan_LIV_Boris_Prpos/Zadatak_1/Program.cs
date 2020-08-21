@@ -49,14 +49,14 @@ namespace Zadatak_1
                 item.ApproachStart();
                 //initialize full gas tank and consumption per second
                 item.FuelLeft = 100;
-                item.FuelSpentBySecond = rnd.Next(4, 7);
+                item.FuelSpentBySecond = rnd.Next(4, 10);
             }
             //creating orange golf =>by specification in task text
             Car car3 = new Car("Orange");
             car3.Manufacturer = "Golf";
             car3.Registration = "222-PD-ZZ";
             car3.FuelLeft = 100;
-            car3.FuelSpentBySecond = rnd.Next(4, 7);
+            car3.FuelSpentBySecond = rnd.Next(4, 10);
             car3.ApproachStart();
 
             //start threads that represent cars racing and start thread that represents semaphore
