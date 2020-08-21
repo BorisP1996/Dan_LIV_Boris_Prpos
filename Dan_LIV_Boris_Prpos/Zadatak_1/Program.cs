@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Zadatak_1
 {
@@ -19,6 +15,7 @@ namespace Zadatak_1
 
         static void Main(string[] args)
         {
+            //create vecihles
             Car car1 = new Car("Blue");
             Car car2 = new Car("Red");
             car1.Registration = "000-PD-XX";
@@ -28,6 +25,7 @@ namespace Zadatak_1
             Tractor tractor1 = new Tractor("Green");
             Tractor tractor2 = new Tractor("Yellow");
 
+            //create collections and add vehicles to them
             List<MotorVecihle> cars = new List<MotorVecihle>();
             List<MotorVecihle> trucks = new List<MotorVecihle>();
             List<MotorVecihle> tractors = new List<MotorVecihle>();
@@ -39,18 +37,21 @@ namespace Zadatak_1
             tractors.Add(tractor1);
             tractors.Add(tractor2);
 
+            //simulate 5 second countdown
             for (int i = 5; i >0; i--)
             {
                 Console.WriteLine(i);
                 Thread.Sleep(1000);
             }
+            //every car from the list approached the start
             foreach (Car item in cars)
             {
                 item.ApproachStart();
+                //initialize full gas tank and consumption per second
                 item.FuelLeft = 100;
                 item.FuelSpentBySecond = rnd.Next(4, 7);
             }
-
+            //creating orange golf =>by specification in task text
             Car car3 = new Car("Orange");
             car3.Manufacturer = "Golf";
             car3.Registration = "222-PD-ZZ";
@@ -58,6 +59,7 @@ namespace Zadatak_1
             car3.FuelSpentBySecond = rnd.Next(4, 7);
             car3.ApproachStart();
 
+            //start threads that represent cars racing and start thread that represents semaphore
             Thread t1 = new Thread(() => car1.RaceMethod());
             Thread t2 = new Thread(() => car2.RaceMethod());
             Thread t3 = new Thread(() => car3.RaceMethod());

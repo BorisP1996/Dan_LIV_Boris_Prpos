@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace Zadatak_1
@@ -56,23 +52,29 @@ namespace Zadatak_1
                 Console.WriteLine("\t\t Car with registration: {0} approached the start", Registration);
             }
         }
-
+        /// <summary>
+        /// Method that describes whole race
+        /// </summary>
         public void RaceMethod()
         {
             Stopwatch stopwatch1 = new Stopwatch();
             Stopwatch stopwatch2 = new Stopwatch();
             Stopwatch stopwatch3 = new Stopwatch();
 
+            //stopwatch for first 10 seconds
             stopwatch1.Start();
 
             while (stopwatch1.ElapsedMilliseconds<10000)
             {
+                //if car has fuel left
                 if (FuelLeft > 0)
                 {
                     Thread.Sleep(1000);
                     Console.WriteLine("Car with registration {0} is going forward", Registration);
+                    //fuel is decremented by consumption per second
                     FuelLeft = FuelLeft - FuelSpentBySecond;
                 }
+                //if car does not have anymore fuel it stops the race
                 else
                 {
                     Console.WriteLine("\tCar with registration {0} stopped-empty gas tank.",Registration);
@@ -82,9 +84,10 @@ namespace Zadatak_1
             stopwatch1.Stop();
 
             Stop();
-
+            //auto reset event = waiting on sempahore=>Look at Semaphore method
             _auto.WaitOne();
 
+            //after semaphore race continues for 3 more seconds
             stopwatch2.Start();
             Go();
             while (stopwatch2.ElapsedMilliseconds<3000)
@@ -95,6 +98,7 @@ namespace Zadatak_1
             }
             stopwatch2.Stop();
 
+            //cars arive at the gas station=>they can only go one by one
             lock (locker)
             {
                 if (FuelLeft<15)
@@ -105,6 +109,8 @@ namespace Zadatak_1
                 }
             }
 
+
+            //after gas station, race continues for 7 more seconds (if car has any fuel)
             stopwatch3.Start();
             while (stopwatch3.ElapsedMilliseconds < 7000)
             {
@@ -125,7 +131,9 @@ namespace Zadatak_1
             Console.WriteLine("\n\t Car with registration {0} has finsihed the race!\n", Registration);
 
         }
-
+        /// <summary>
+        /// For every 2 seconds light changes
+        /// </summary>
         public static void Sempaphore()
         {
             Stopwatch stopwatch4 = new Stopwatch();
